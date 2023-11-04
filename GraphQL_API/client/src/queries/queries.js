@@ -1,27 +1,67 @@
-import { gql } from "apollo-boost";
+import { gql } from 'apollo-boost';
 
-const getTasksQuery = gql`
+const getTasksQuery = gql
+`{
+  tasks {
+    id
+    title
+  }
+}`;
+
+const getProjectsQuery = gql
+`{
+  projects {
+    id
+    title
+  }
+}`;
+
+// Define variables and types to pass into mutation
+const addTaskMutation = gql
+`mutation($title: String!, $weight: Int!, $description: String!, $projectId: ID!)
   {
-    tasks {
+    addTask(
+      title: $title,
+      weight: $weight,
+      description: $description,
+      projectId: $projectId
+    ) {
+      title
+      id
+    }
+}`;
+
+const addProjectMutation = gql
+`mutation($title: String!, $weight: Int!, $description: String!)
+  {
+    addProject(
+      title: $title,
+      weight: $weight,
+      description: $description
+    ) {
+      title
+      id
+    }
+}`;
+
+const getTaskDetailQuery = gql`
+  query($id: ID) {
+    task(id: $id) {
       id
       title
+      weight
       description
       project {
-        id
-        name
+        title
+        description
+        tasks {
+          title
+          id
+        }
       }
     }
   }
 `;
 
 
-const getProjectsQuery = gql`
-  {
-    projects {
-      id
-      title
-    }
-  }
-`;
-
-export { getTasksQuery, getProjectsQuery };
+export { getTasksQuery, getProjectsQuery, addTaskMutation, addProjectMutation, getTaskDetailQuery };
