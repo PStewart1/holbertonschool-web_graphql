@@ -1,5 +1,7 @@
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList, GraphQLNonNull } = require('graphql');
 const _ = require('lodash');
+const Task = require('../models/task');
+const Project = require('../models/project');
 
 const ProjectType = new GraphQLObjectType({
   name: 'Project',
@@ -66,6 +68,46 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addProject: {
+      type: ProjectType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        weight: { type: new GraphQLNonNull(GraphQLInt) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        const project = new Project({
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+        });
+        return project.save();
+      },
+    },
+    addTask: {
+      type: TaskType,
+      args: {
+        projectId: { type: GraphQLID },
+        title: { type: GraphQLString },
+        weight: { type: GraphQLInt },
+        description: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        const task = new Task({
+          projectId: args.projectId,
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+        });
+        return task.save();
+      },
+    },
+  },
+});
+
 const tasks = [
   {id: '1', projectId: '1', title: 'Create your first webpage', weight: 1, description: 'Create your first HTML file 0-index.html with: -Add the doctype on the first line (without any comment) -After the doctype, open and close a html tag Open your file in your browser (the page should be blank)'},
   {id: '2', projectId: '1', title: 'Structure your webpage', weight: 1, description: 'Copy the content of 0-index.html into 1-index.html Create the head and body sections inside the html tag, create the head and body tags (empty) in this order'}
@@ -79,4 +121,5 @@ const projects = [
 module.exports = TaskType;
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: Mutation,
 });
