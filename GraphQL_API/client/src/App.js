@@ -11,14 +11,15 @@ const client = new ApolloClient({
 
 function App() {
   return ( 
-    <ApolloProvider client={client}></ApolloProvider>,
-    <div id = "main">
-      <div id = "bg"> </div> 
-      <h1> Holberton school tasks </h1> 
-      <TaskList/>
-      <AddProject/>
-      <AddTask/>
-    </div>
+    <ApolloProvider client={client}>
+      <div id = "main">
+        <div id = "bg"> </div> 
+        <h1> Holberton school tasks </h1> 
+        <TaskList />
+        <AddProject />
+        <AddTask />
+      </div>
+    </ApolloProvider>
   );
 }
 
