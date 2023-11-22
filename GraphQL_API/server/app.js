@@ -2,7 +2,7 @@ const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const schema = require('./schema/schema');
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://paul:202OLji3YoOMNsfh@cluster0.z3qqstz.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://MONGOUSER:MONGOPW@cluster0.z3qqstz.mongodb.net/?retryWrites=true&w=majority";
 const cors = require('cors');
 
 const app = express();
